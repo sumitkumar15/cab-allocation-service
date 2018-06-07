@@ -1,0 +1,14 @@
+{
+  "name": "fuber",
+  "version": "1.0.0",
+  "description": "Cab allocation service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sumit",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
