@@ -24,6 +24,8 @@ class Cab {
     let l2 = loc
     return Math.sqrt(Math.pow(l1.lat - l2.lat, 2) + Math.pow(l1.long - l2.long, 2))
   }
+
+  getColor () { return this.vehicle.color }
 }
 
 module.exports = Cab
