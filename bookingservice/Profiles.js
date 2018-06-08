@@ -1,4 +1,3 @@
-const Person = require('../bookingservice/Person')
 const {Location} = require('../bookingservice/utils')
 // takes object of type person as constructor argument
 class Driver {

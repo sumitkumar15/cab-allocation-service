@@ -1,6 +1,3 @@
-const Cab = require('./Cab')
-const {Car, Location} = require('./utils')
-const {Customer, Driver} = require('./Profiles')
 class Ride {
   constructor (pickup, customer, cab) {
     this.pickupLocation = pickup // object of Location class
