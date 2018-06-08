@@ -6,15 +6,17 @@ class Ride {
     this.rideId = Math.floor(Math.random() * 100000)
     this.startTime = Date.now()
     this.endTime = null
+    this.destination = null
   }
 
-  endRide () {
+  endRide (loc) {
     this.endTime = Date.now()
+    this.destination = loc
   }
 
   rideDistance () {
     let l1 = this.pickupLocation
-    let l2 = this.dropLocation
+    let l2 = this.destination
     return Math.sqrt(Math.pow(l1.lat - l2.lat, 2) + Math.pow(l1.long - l2.long, 2))
   }
 
@@ -53,15 +55,15 @@ class AllocatorService {
     }
   }
 
-  removeCabFromPool(index) {
+  removeCabFromPool (index) {
     this.driverPool.splice(index, 1)
   }
 
-  addCabToPool(cab) {
+  addCabToPool (cab) {
     this.driverPool.push(cab)
   }
 
-  addRide(ride) {
+  addRide (ride) {
     this.ongoingRides[ride.rideId] = ride
   }
 
@@ -80,8 +82,24 @@ class AllocatorService {
     return index
   }
 
-  endRide (rideId) {
+  endRide (rideId, loc) {
+    let ride = this.ongoingRides[rideId]
+    delete this.ongoingRides[rideId]
+    ride.endRide(loc)
 
+    let cab = ride.cab
+    cab.setLocation(loc)   // ride ends
+    this.addCabToPool(cab) // cab is ready to be added to pool again
+    let invoice = this.rideInvoice(ride)
+    return invoice
+  }
+
+  rideInvoice (ride) {
+    return {
+      statuscode: 2,
+      distance: ride.rideDistance(),
+      amount: ride.calcAmount()
+    }
   }
 
   rejectRequest () {
