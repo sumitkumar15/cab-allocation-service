@@ -1,6 +1,5 @@
 class Cab {
-  constructor (cabId, car, driver, location) {
-    this.id = cabId
+  constructor (car, driver, location) {
     this.vehicle = car
     this.driver = driver
     this.location = location
