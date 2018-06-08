@@ -1,9 +1,8 @@
 class Ride {
-  constructor (pickup, drop, customer, cab) {
-    this.pickupLocation = pickup
-    this.dropLocation = drop
+  constructor (pickup, customer, cab) {
+    this.pickupLocation = pickup // object of Location class
     this.customer = customer
-    this.cab = cab
+    this.cab = cab  // Object of Cab
     this.rideId = Math.floor(Math.random() * 100000)
     this.startTime = Date.now()
     this.endTime = null
@@ -40,19 +39,52 @@ class AllocatorService {
     return AllocatorService.instance
   }
 
-  assignCab (cabRequest, cab) {
-
+  assignCab (customer) {
+    let loc = customer.location
+    let cabIndex = this.findCab(loc)
+    if (cabIndex == null) {
+      return this.rejectRequest()
+    } else {
+      let cab = this.driverPool[cabIndex]
+      this.removeCabFromPool(cabIndex)
+      let ride = new Ride(loc, customer, cab)
+      this.addRide(ride)
+      return this.acceptRequest()
+    }
   }
 
-  findCab (cabRequest) {
+  removeCabFromPool(index) {
+    this.driverPool.splice(index, 1)
+  }
 
+  addRide(ride) {
+    this.ongoingRides[ride.rideId] = ride
+  }
+
+  findCab (location) {
+    if (this.driverPool.length === 0) return null
+    let cabs = this.driverPool
+    let index = 0
+    let minDist = cabs[index].getDistance(location)
+    for (let i = 1; i < cabs.length; i++) {
+      let dist = cabs[i].getDistance(location)
+      if (dist < minDist) {
+        index = i
+        minDist = dist
+      }
+    }
+    return index
   }
 
   endRide (endRequest) {
 
   }
 
-  rejectRequest (cabRequest) {
+  rejectRequest () {
+
+  }
+
+  acceptRequest () {
 
   }
 }
