@@ -49,12 +49,16 @@ class AllocatorService {
       this.removeCabFromPool(cabIndex)
       let ride = new Ride(loc, customer, cab)
       this.addRide(ride)
-      return this.acceptRequest()
+      return this.acceptRequest(ride.rideId)
     }
   }
 
   removeCabFromPool(index) {
     this.driverPool.splice(index, 1)
+  }
+
+  addCabToPool(cab) {
+    this.driverPool.push(cab)
   }
 
   addRide(ride) {
@@ -76,16 +80,19 @@ class AllocatorService {
     return index
   }
 
-  endRide (endRequest) {
+  endRide (rideId) {
 
   }
 
   rejectRequest () {
-
+    return {statuscode: -1}
   }
 
-  acceptRequest () {
-
+  acceptRequest (id) {
+    return {
+      statuscode: 1,
+      rideid: id
+    }
   }
 }
 
