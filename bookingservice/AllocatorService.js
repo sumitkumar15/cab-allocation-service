@@ -109,7 +109,6 @@ class AllocatorService {
 
   rideInvoice (ride) {
     return {
-      statuscode: 2,
       distance: ride.rideDistance(),
       amount: ride.calcAmount()
     }
