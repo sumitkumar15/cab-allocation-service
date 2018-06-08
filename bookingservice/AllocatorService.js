@@ -43,7 +43,8 @@ class AllocatorService {
 
   assignCab (customer) {
     let loc = customer.location
-    let cabIndex = this.findCab(loc)
+    let color = customer.colorPref
+    let cabIndex = this.findCab(loc, color)
     if (cabIndex == null) {
       return this.rejectRequest()
     } else {
@@ -67,19 +68,27 @@ class AllocatorService {
     this.ongoingRides[ride.rideId] = ride
   }
 
-  findCab (location) {
+  findCab (location, color) {
     if (this.driverPool.length === 0) return null
     let cabs = this.driverPool
-    let index = 0
-    let minDist = cabs[index].getDistance(location)
-    for (let i = 1; i < cabs.length; i++) {
-      let dist = cabs[i].getDistance(location)
-      if (dist < minDist) {
-        index = i
-        minDist = dist
+    let index = -1
+    let minDist = Infinity
+    for (let i = 0; i < cabs.length; i++) {
+      let cab = cabs[i]
+      let dist = cab.getDistance(location)
+      if (color != null) {
+        if (dist < minDist && cab.getColor() === color) {
+          index = i
+          minDist = dist
+        }
+      } else {
+        if (dist < minDist) {
+          index = i
+          minDist = dist
+        }
       }
     }
-    return index
+    return index === -1 ? null : index
   }
 
   endRide (rideId, loc) {
