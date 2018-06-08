@@ -15,7 +15,14 @@ class Cab {
   }
 
   callCab (location) {
-    // assigns cab to customer
+    // calls cab to location
+  }
+
+  getDistance (loc) {
+    // gets distance b/w cab & given location
+    let l1 = this.location
+    let l2 = loc
+    return Math.sqrt(Math.pow(l1.lat - l2.lat, 2) + Math.pow(l1.long - l2.long, 2))
   }
 }
 
